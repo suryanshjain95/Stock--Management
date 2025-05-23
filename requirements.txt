@@ -1,6 +1,6 @@
-pandas==2.2.3
+pandas
 
-matplotlib==3.10.0
+matplotlib
 
 streamlit
 
