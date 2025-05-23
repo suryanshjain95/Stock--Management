@@ -1,44 +1,80 @@
-import yfinance as yf
-import matplotlib.pyplot as plt
-from datetime import date
 import streamlit as st
-dic={"Apple":"AAPL", "Tesla":"TSLA", "Microsoft":"MSFT","Mullen":"MULN","Bit Brother":"BETSF","Paragon":"PRGNF","Smart for Life":"SMFL","Wearable Devices":"WLDS","Kohl's Corporation":"KSS","Affymax":"AFFY","Wolfspeed":"WOLF","Beyond Meat":"BYND","American Rebel":"AREB","Entegris":"ENTG","CAVA Group":"CAVA","Amcor":"AMCR","Tapestry":"TPR","CarMax":"KMX","Pool Corporation":"POOL","Exelixis":"EXEL"}
+import pandas as pd
+import yfinance as yf
+from datetime import date
+import time
+
+st.set_page_config(layout="wide")
+
+df = pd.read_csv('pages/data.csv')
 
 today = date.today()
 
-# Set the start and end date
 start_date = '1990-01-01'
-end_date = st.date_input("End Date", max_value="today")
+end_date = today
 
-#Set the ticker
-if "ticker" in st.session_state:
-  ticker = st.session_state.ticker
-else:
-  tic = st.selectbox("How would you like to be contacted?",("Apple", "Tesla", "Microsoft","Mullen","Bit Brother","Paragon","Smart for Life","Wearable Devices","Kohl's Corporation","Affymax","Wolfspeed","Beyond Meat","American Rebel","Entegris","CAVA Group","Amcor","Tapestry","CarMax","Pool Corporation","Exelixis"))
-  ticker=dic[tic]
+#ticker = 'AAPL'
+def change(ticker):
 
-# Get the data
-data = yf.download(ticker, start_date, end_date)
+  data = yf.download(ticker, start_date, end_date)
+  time.sleep(4)
+  print(data)
+  d2=data.iloc[-1,3]
+  d1=data.iloc[-1,0]
+  d12=d2-d1
+  cha=(d12*100)/d2
+  aa=str(cha)
+  aa=aa[0:5]+"%"
+  return aa,str(d12)
 
-# Print 5 rows
-data.tail()
-print("\n",data)
+def nm(n):
+    n=n-1
+    x=df.iloc[n, 1]
+    return str(x)
+
+def but(ticker):
+  if ticker:
+     st.session_state.ticker = ticker
+     st.switch_page("pages/plot.py")
+#with st.sidebar:
+#    st.image("icon.jpg",width=100)
+num_rows = len(df.index)
+
+for i in range(0,num_rows,4):
+
+    col1, col2, col3, col4 = st.columns(4, border=True)
+
+    a1,a2=change(df.iloc[i,2])
+    an="Details of "+df.iloc[i,1]
+    with col1:
+      if st.button(nm(i+1),key=df.iloc[i,2], type="tertiary"):
+         but(df.iloc[i,2])
+      st.metric(df.iloc[i,2],a1,a2[0:5])
 
 
-print(data.iloc[-1,3])
-print(data.iloc[-1,0])
+    b1,b2=change(df.iloc[i+1,2])
+    an="Details of "+df.iloc[i+1,1]
+    with col2:
+      if st.button(nm(i+2),key=df.iloc[i+1,2], type="tertiary"):
+         but(df.iloc[i+1,2])
+      st.metric(df.iloc[i+1,2],b1,b2[0:5])
 
 
-fig, ax = plt.subplots()
-ax.plot(data['Close'])
-ax.set_xlabel('Year')
-ax.set_ylabel('Adjusted close price')
-ax.set_title('Adjusted close price data')
-st.pyplot(fig)
-#%matplotlib inline
-# Plot adjusted close price data
-#data['Close'].plot()
-#plt.xlabel('Year')
-#plt.ylabel('Adjusted close price')
-#plt.title('Adjusted close price data')
-#plt.show()
+
+    c1,c2=change(df.iloc[i+2,2])
+    an="Details of "+df.iloc[i+2,1]
+    with col3:
+      if st.button(nm(i+3),key=df.iloc[i+2,2], type="tertiary"):
+         but(df.iloc[i+2,2])
+      st.metric(df.iloc[i+2,2],c1,c2[0:5])
+
+
+
+    d1,d2=change(df.iloc[i+3,2])
+    an="Details of "+df.iloc[i+3,1]
+    with col4:
+      if st.button(nm(i+4),key=df.iloc[i+3,2], type="tertiary"):
+         but(df.iloc[i+3,2])
+      st.metric(df.iloc[i+3,2],d1,d2[0:5])
+
+
