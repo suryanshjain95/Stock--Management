@@ -17,8 +17,8 @@ end_date = today
 def change(ticker):
 
   data = yf.download(ticker, start_date, end_date)
-  time.sleep(4)
-  print(data)
+  #time.sleep(4)
+  #print(data)
   d2=data.iloc[-1,3]
   d1=data.iloc[-1,0]
   d12=d2-d1
