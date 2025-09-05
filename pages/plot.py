@@ -2,9 +2,11 @@ import yfinance as yf
 import matplotlib.pyplot as plt
 from datetime import date
 import streamlit as st
-import pandas as pd # Import pandas
+import pandas as pd
 
-dic={"Apple":"AAPL", "Tesla":"TSLA", "Microsoft":"MSFT","Mullen":"MULN","Bit Brother":"BETSF","Paragon":"PRGNF","Smart for Life":"SMFL","Wearable Devices":"WLDS","Kohl's Corporation":"KSS","Affymax":"AFFY","Wolfspeed":"WOLF","Beyond Meat":"BYND","American Rebel":"AREB","Entegris":"ENTG","CAVA Group":"CAVA","Amcor":"AMCR","Tapestry":"TPR","CarMax":"KMX","Pool Corporation":"POOL","Exelixis":"EXEL"}
+# Load the stock data from the CSV file
+df = pd.read_csv('pages/data.csv')
+dic = pd.Series(df.stock.values, index=df.Name).to_dict()
 
 today = date.today()
 
