@@ -1,9 +1,7 @@
 pandas
-
 matplotlib
-
 streamlit
-
-datetime
-
 yfinance
+prophet
+pandas-ta
+nltk
