@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from datetime import date
 import streamlit as st
 import pandas as pd
+import pandas_ta as ta
 
 # Load the stock data from the CSV file
 df = pd.read_csv('pages/data.csv')
@@ -30,12 +31,22 @@ if not data.empty:
     st.subheader("Historical Stock Prices")
     st.write(data.tail()) # Display last 5 rows
 
-    # Plot adjusted close price data
+    # Calculate technical indicators
+    data.ta.bbands(append=True)
+    data.ta.rsi(append=True)
+    data.ta.macd(append=True)
+
+
+    # Plot adjusted close price data with Bollinger Bands
     fig, ax = plt.subplots(figsize=(10, 6)) # Increased figure size
-    ax.plot(data['Close'])
+    ax.plot(data['Close'], label='Close Price')
+    ax.plot(data['BBL_20_2.0'], label='Lower Bollinger Band', linestyle='--')
+    ax.plot(data['BBM_20_2.0'], label='Middle Bollinger Band', linestyle='--')
+    ax.plot(data['BBU_20_2.0'], label='Upper Bollinger Band', linestyle='--')
     ax.set_xlabel('Date')
     ax.set_ylabel('Adjusted Close Price')
-    ax.set_title(f'{ticker_symbol} Adjusted Close Price Data')
+    ax.set_title(f'{ticker_symbol} Adjusted Close Price Data with Bollinger Bands')
+    ax.legend()
     st.pyplot(fig)
 
     # Add more plots and data:
@@ -46,6 +57,29 @@ if not data.empty:
     ax_vol.set_ylabel('Volume')
     ax_vol.set_title(f'{ticker_symbol} Trading Volume')
     st.pyplot(fig_vol)
+
+    # RSI
+    st.subheader("Relative Strength Index (RSI)")
+    fig_rsi, ax_rsi = plt.subplots(figsize=(10, 4))
+    ax_rsi.plot(data['RSI_14'], color='purple')
+    ax_rsi.axhline(70, linestyle='--', color='red')
+    ax_rsi.axhline(30, linestyle='--', color='green')
+    ax_rsi.set_xlabel('Date')
+    ax_rsi.set_ylabel('RSI')
+    ax_rsi.set_title(f'{ticker_symbol} RSI')
+    st.pyplot(fig_rsi)
+
+    # MACD
+    st.subheader("Moving Average Convergence Divergence (MACD)")
+    fig_macd, ax_macd = plt.subplots(figsize=(10, 4))
+    ax_macd.plot(data['MACD_12_26_9'], label='MACD', color='blue')
+    ax_macd.plot(data['MACDs_12_26_9'], label='Signal Line', color='red')
+    ax_macd.set_xlabel('Date')
+    ax_macd.set_ylabel('MACD')
+    ax_macd.set_title(f'{ticker_symbol} MACD')
+    ax_macd.legend()
+    st.pyplot(fig_macd)
+
 
     # Dividends and Stock Splits
     st.subheader("Dividends and Stock Splits")

@@ -3,3 +3,5 @@ matplotlib
 streamlit
 yfinance
 prophet
+pandas-ta
+nltk
