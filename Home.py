@@ -13,6 +13,14 @@ today = date.today()
 start_date = '1990-01-01'
 end_date = today
 
+st.sidebar.page_link("pages/news.py")
+st.sidebar.page_link("pages/plot.py")
+st.sidebar.page_link("pages/portfolio.py")
+st.sidebar.page_link("pages/prediction.py")
+st.sidebar.page_link("pages/screener.py")
+st.sidebar.page_link("pages/suggestion.py")
+st.sidebar.page_link("pages/trending.py")
+
 #ticker = 'AAPL'
 def change(ticker):
 
